@@ -1,0 +1,5 @@
+timestamp,type,category,amount
+2026-07-24T15:49:33.649088,Initial Deposit,Income,8000.0
+2026-07-24T15:50:13.976723,Deposit,Income,400.0
+2026-07-24T15:50:16.413364,Withdrawal,Expense,300.0
+2026-07-24T15:50:19.626385,Round-up Savings,Savings,0.0
