@@ -9,7 +9,7 @@ A multi-account personal finance simulator built in Java, with a Python analytic
 - **Budgeting tools** — set a monthly budget, track spending by category, and check whether you're over/under your limit
 - **Round-up savings** — optionally round up withdrawals to the nearest dollar and stash the difference in savings
 - **Data export & analysis** — export full transaction history to CSV, then analyze spending patterns using a Python script (pandas + matplotlib)
-- **Live stock investing** — buy stocks using real-time prices pulled from the Alpha Vantage API, and track portfolio value and gain/loss over time
+- **Live stock investing** — buy and sell stocks using real-time prices pulled from the Alpha Vantage API, and track portfolio value and gain/loss over time
 
 ## Tech Stack
 
@@ -36,6 +36,12 @@ transactions.csv # exported transaction data (generated at runtime)
 2. Compile and run `Main.java` from your IDE or terminal
 3. Follow the prompts to create accounts, make transactions, and (optionally) invest in stocks
 4. To analyze your spending: export transactions to CSV from the app, then run:
+4. To analyze your spending: export transactions to CSV from the app, then run:
+​```bash
+python3 analyze.py transactions.csv
+​```
+This generates visualizations of your spending patterns by category.
+
 ## Notes
 
 - The stock investing feature requires a free [Alpha Vantage API key](https://www.alphavantage.co/support/#api-key)
@@ -44,6 +50,5 @@ transactions.csv # exported transaction data (generated at runtime)
 ## Planned Improvements
 
 - Adding a web frontend
-- Sell stock functionality
 - Password-based user authentication
 - Basic fraud/anomaly detection on transactions
