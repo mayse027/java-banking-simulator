@@ -34,8 +34,7 @@ transactions.csv # exported transaction data (generated at runtime)
 
 1. Make sure you have a JDK (17+) installed
 2. Compile and run `Main.java` from your IDE or terminal
-3. Follow the prompts to create accounts, make transactions, and (optionally) invest in stocks
-4. To analyze your spending: export transactions to CSV from the app, then run:
+3. Follow the prompts to create accounts, make transactions, and (optionally) invest in stocks 
 4. To analyze your spending: export transactions to CSV from the app, then run:
 ​```bash
 python3 analyze.py transactions.csv
