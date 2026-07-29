@@ -19,6 +19,10 @@ public class Stock {
         return quantity;
     }
 
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
     public double getPurchasePrice() {
         return purchasePrice;
     }

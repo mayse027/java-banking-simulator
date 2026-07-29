@@ -37,8 +37,8 @@ public class Main {
                 keepGoing = false;
             } else if (selection.equalsIgnoreCase("P")) {
                 int portfolioChoice = 0;
-                while (portfolioChoice != 3) {
-                    System.out.println("1. Buy Stock\n2. View Portfolio\n3. Done with portfolio");
+                while (portfolioChoice != 4) {
+                    System.out.println("1. Buy Stock\n2. Sell Stock\n3. View Portfolio\n4. Done with portfolio");
                     portfolioChoice = scanner.nextInt();
 
                     if (portfolioChoice == 1) {
@@ -48,8 +48,14 @@ public class Main {
                         double quantity = scanner.nextDouble();
                         portfolio.buyStock(symbol, quantity);
                     } else if (portfolioChoice == 2) {
-                        portfolio.viewPortfolio();
+                        System.out.print("Enter stock symbol (e.g. AAPL): ");
+                        String symbol = scanner.next();
+                        System.out.print("Enter quantity: ");
+                        double quantity = scanner.nextDouble();
+                        portfolio.sellStock(symbol, quantity);
                     } else if (portfolioChoice == 3) {
+                        portfolio.viewPortfolio();
+                    } else if (portfolioChoice == 4) {
                         // do nothing, exits
                     } else {
                         System.out.println("Invalid option. Please try again.");

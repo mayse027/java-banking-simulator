@@ -36,6 +36,25 @@ public class Portfolio {
         System.out.println(e.getMessage() + ". Please check the symbol and try again.");
     }
 }
+    public void sellStock(String symbol, double quantity) {
+        for (int i = 0; i < holdings.size(); i++) {
+            Stock s = holdings.get(i);
+            if (s.getSymbol().equals(symbol)) {
+                if (s.getQuantity() >= quantity) {
+                    s.setQuantity(s.getQuantity() - quantity);
+                    System.out.println("Sold " + quantity + " shares of " + symbol + ".");
+                    if (s.getQuantity() == 0) {
+                        holdings.remove(i);
+                    }
+                    return;
+                } else {
+                    System.out.println("Not enough shares to sell. You have " + s.getQuantity() + " shares.");
+                    return;
+                }
+            }
+        }
+        System.out.println("You do not own any shares of " + symbol + ".");
+    }
     public void viewPortfolio() throws Exception {
         System.out.println("\n--- Your Portfolio ---");
         double totalValue = 0;
