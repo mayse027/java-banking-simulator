@@ -19,7 +19,7 @@ A multi-account personal finance simulator built in Java, with a Python analytic
 - **org.json** — JSON parsing for API responses
 
 ## Project Structure
-src/
+src
 ├── Main.java # entry point, menu-driven CLI
 ├── User.java # manages a user's list of accounts
 ├── Account.java # abstract base class for accounts
