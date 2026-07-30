@@ -37,7 +37,7 @@ public abstract class Account {
             return balance;
         }
 
-       public void withdraw(double amount){
+public void withdraw(double amount){
     if (amount <= 0){
         System.out.println("Invalid amount. Please try again.");
         return;
@@ -49,10 +49,17 @@ public abstract class Account {
 
     balance -= amount;
     String category = promptForCategory();
-    CraftProject project = selectExistingProject(true);
     Transaction t = new Transaction("Withdrawal", amount, category);
     transactions.add(t);
     detector.checkTransaction(t);
+
+    List<String> craftCategories = List.of("Fabric", "Floss/Thread", "Patterns", "Craft Tools/Notions");
+    if (craftCategories.contains(category)) {
+        CraftProject project = selectExistingProject(true);
+        if (project != null) {
+            project.addTransaction(t);
+        }
+    }
 
     System.out.println("Withdrawal successful. Would you like to enable round-up savings for this transaction? (yes/no)");
     String response = Main.scanner.next();
@@ -65,7 +72,7 @@ public abstract class Account {
     }
 }
         private String promptForCategory() {
-    String[] categories = {"Groceries", "Entertainment", "Bills", "Transportation", "Dining", "Shopping", "Other"};
+    String[] categories = {"Fabric", "Floss/Thread", "Patterns", "Craft Tools/Notions", "Groceries", "Entertainment", "Bills", "Transportation", "Dining", "Shopping", "Other"};
 
     while (true) {
         System.out.println("Select a category:");
@@ -85,8 +92,8 @@ public abstract class Account {
         }
 
         System.out.println("Invalid choice. Please enter a number between 1 and " + categories.length + ".");
-        }
-    }   
+    }
+}
 
         public double checkBalance(){
             return balance;
