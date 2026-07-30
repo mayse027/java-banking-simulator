@@ -10,6 +10,7 @@ A multi-account personal finance simulator built in Java, with a Python analytic
 - **Round-up savings** — optionally round up withdrawals to the nearest dollar and stash the difference in savings
 - **Data export & analysis** — export full transaction history to CSV, then analyze spending patterns using a Python script (pandas + matplotlib)
 - **Live stock investing** — buy and sell stocks using real-time prices pulled from the Alpha Vantage API, and track portfolio value and gain/loss over time
+- **Fraud/anomaly detection** — flags withdrawls that are 3+ standard deviations above a categorys average with cold-start handling so categories aren't evaluated for fraud until enough history exists (5+ transactions) and flagged transactions included a detailed reasoning with the standard-deviation distance from the norm
 
 ## Tech Stack
 
@@ -50,4 +51,3 @@ This generates visualizations of your spending patterns by category.
 
 - Adding a web frontend
 - Password-based user authentication
-- Basic fraud/anomaly detection on transactions
