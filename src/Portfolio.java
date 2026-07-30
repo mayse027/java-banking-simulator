@@ -4,7 +4,6 @@ import java.net.http.HttpClient; // phone
 import java.net.http.HttpRequest; // description of request
 import java.net.http.HttpResponse; // what comes back from call
 import java.net.URI;
-import org.json.JSONObject;
 
 public class Portfolio {
     private List<Stock> holdings;
@@ -12,21 +11,46 @@ public class Portfolio {
     public Portfolio() {
         holdings = new ArrayList<>();
     }
-  public double getCurrentPrice(String symbol) throws Exception {
-    String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + API_KEY;
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
-    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-    JSONObject json = new JSONObject(response.body());
-    JSONObject quote = json.getJSONObject("Global Quote");
+    public double getCurrentPrice(String symbol) throws Exception {
+        String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + API_KEY;
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-    if (!quote.has("05. price")) {
-        throw new IllegalArgumentException("Invalid stock symbol: " + symbol);
+        String body = response.body();
+        String priceString = extractJsonString(body, "05. price");
+        if (priceString == null || priceString.isBlank()) {
+            throw new IllegalArgumentException("Invalid stock symbol: " + symbol);
+        }
+
+        return Double.parseDouble(priceString);
     }
 
-    return Double.parseDouble(quote.getString("05. price"));
-}
+    private String extractJsonString(String json, String key) {
+        String quotedKey = '"' + key + '"';
+        int keyIndex = json.indexOf(quotedKey);
+        if (keyIndex < 0) {
+            return null;
+        }
+
+        int colonIndex = json.indexOf(':', keyIndex + quotedKey.length());
+        if (colonIndex < 0) {
+            return null;
+        }
+
+        int valueStart = json.indexOf('"', colonIndex + 1);
+        if (valueStart < 0) {
+            return null;
+        }
+
+        int valueEnd = json.indexOf('"', valueStart + 1);
+        if (valueEnd < 0) {
+            return null;
+        }
+
+        return json.substring(valueStart + 1, valueEnd);
+    }
    public void buyStock(String symbol, double quantity) throws Exception {
     try {
         double price = getCurrentPrice(symbol);
