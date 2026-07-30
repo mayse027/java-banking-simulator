@@ -15,7 +15,7 @@ public class CraftProject {
     public CraftProject(String name, String craftType) {
         this.name = name;
         this.craftType = craftType;
-        this.status = ProjectStatus.PENDING;
+        this.status = ProjectStatus.IN_PROGRESS;
         this.transactions = new ArrayList<>();
         this.startDate = LocalDate.now();
         this.lastUpdated = LocalDate.now();
@@ -42,19 +42,32 @@ public class CraftProject {
         long monthsSinceLastUpdate = java.time.temporal.ChronoUnit.MONTHS.between(lastUpdated, LocalDate.now());
         return monthsSinceLastUpdate > monthsThreshold;
     }
-
-    public boolean isFinished() {
-        if (status == ProjectStatus.FINISHED) {
-            return status == ProjectStatus.FINISHED;
-        }
-        return false;
+    public void markAsFinished() {
+        this.status = ProjectStatus.FINISHED;
+        this.endDate = LocalDate.now();
     }
-
+    public boolean isFinished() {
+        return status == ProjectStatus.FINISHED;
+    }
+    public void markDropped() {
+        this.status = ProjectStatus.DROPPED;
+    }
     public String getName() {
         return name;
     }
 
     public ProjectStatus getStatus() {
         return status;
+    }
+    public String getCraftType() {
+        return craftType;
+    }
+
+    public LocalDate getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
 }

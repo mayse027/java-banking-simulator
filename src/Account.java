@@ -156,4 +156,17 @@ public abstract class Account {
                 System.out.println("You are within your monthly budget of $" + String.format("%.2f", monthlyBudget) + ". Total spending: $" + String.format("%.2f", totalSpending));
             }
         }
+
+        public void viewCraftProjects() {
+            System.out.println("\n--- Craft Projects ---");
+                if (craftProjects.isEmpty()) {
+                    System.out.println("No craft projects yet.");
+                } else {
+                for (CraftProject project : craftProjects) {
+                    String staleFlag = project.isStale(3) ? " ⚠️ STALE" : "";
+                    System.out.println("Name: " + project.getName() + ", Type: " + project.getCraftType() + 
+                    ", Status: " + project.getStatus() + ", Total Cost: $" + String.format("%.2f", project.getTotalCost()) + staleFlag);
+        }
+    }
+}
 }

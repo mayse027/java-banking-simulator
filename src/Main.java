@@ -68,23 +68,24 @@ public class Main {
 
                 int choice = 0;
                 while (choice != 4) {
-                    System.out.println("1. Deposit\n2. Withdraw\n3. Check Balance\n4. Done with this account");
+                    System.out.println("1. Deposit\n2. Withdraw\n3. Check Balance\n4. Done with this account\n5. View Craft Projects");
                     choice = scanner.nextInt();
 
                     if (choice == 1) {
                         System.out.print("Enter amount to deposit: ");
                         double amount = scanner.nextDouble();
                         chosen.deposit(amount);
-                        System.out.println("Remaining balance: " + chosen.checkBalance());
+                        System.out.println("Remaining balance: $" + String.format("%.2f", chosen.checkBalance()));
                     } else if (choice == 2) {
                         System.out.print("Enter amount to withdraw: ");
                         double amount = scanner.nextDouble();
                         chosen.withdraw(amount);
-                        System.out.println("Remaining balance: " + chosen.checkBalance());
+                        System.out.println("Remaining balance: $" + String.format("%.2f", chosen.checkBalance()));
                     } else if (choice == 3) {
-                        System.out.println("Current balance: " + chosen.checkBalance());
+                        System.out.println("Current balance: $" + String.format("%.2f", chosen.checkBalance()));
                     } else if (choice == 4) {
-                        // do nothing, exits
+                    } else if (choice == 5) {
+                        chosen.viewCraftProjects();
                     } else {
                         System.out.println("Invalid option. Please try again.");
                     }
