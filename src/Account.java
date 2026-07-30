@@ -49,6 +49,7 @@ public abstract class Account {
 
     balance -= amount;
     String category = promptForCategory();
+    CraftProject project = selectExistingProject(true);
     Transaction t = new Transaction("Withdrawal", amount, category);
     transactions.add(t);
     detector.checkTransaction(t);
@@ -81,7 +82,6 @@ public abstract class Account {
                 return categories[choice - 1];
             }
         } catch (NumberFormatException e) {
-            // falls through to the reprompt below
         }
 
         System.out.println("Invalid choice. Please enter a number between 1 and " + categories.length + ".");
@@ -158,6 +158,70 @@ public abstract class Account {
                 System.out.println("You are within your monthly budget of $" + String.format("%.2f", monthlyBudget) + ". Total spending: $" + String.format("%.2f", totalSpending));
             }
         }
+        private CraftProject selectExistingProject(boolean allowCreateNew) {
+    if (craftProjects.isEmpty() && !allowCreateNew) {
+        System.out.println("No craft projects yet.");
+        return null;
+    }
+
+    for (int i = 0; i < craftProjects.size(); i++) {
+        System.out.println((i + 1) + ". " + craftProjects.get(i).getName());
+    }
+
+    int createOptionNumber = craftProjects.size() + 1;
+    if (allowCreateNew) {
+        System.out.println(createOptionNumber + ". Start a new project");
+    }
+
+    System.out.print("Enter number: ");
+    int choice = Integer.parseInt(Main.scanner.next());
+
+    if (choice >= 1 && choice <= craftProjects.size()) {
+        return craftProjects.get(choice - 1);
+    } else if (allowCreateNew && choice == createOptionNumber) {
+        System.out.print("Enter new project name: ");
+        String name = Main.scanner.next();
+        System.out.print("Enter craft type (e.g. Cross Stitch, Sewing): ");
+        String craftType = Main.scanner.next();
+        CraftProject newProject = new CraftProject(name, craftType);
+        craftProjects.add(newProject);
+        return newProject;
+    }
+
+    System.out.println("Invalid choice.");
+    return null;
+}
+        public void manageCraftProjects() {
+    int choice = -1;
+    while (choice != 4) {
+        System.out.println("\n1. Add New Project\n2. Mark Project Finished\n3. Mark Project Dropped\n4. Back");
+        choice = Integer.parseInt(Main.scanner.next());
+
+        if (choice == 1) {
+            System.out.print("Enter new project name: ");
+            String name = Main.scanner.next();
+            System.out.print("Enter craft type (e.g. Cross Stitch, Sewing): ");
+            String craftType = Main.scanner.next();
+            craftProjects.add(new CraftProject(name, craftType));
+            System.out.println("Project added.");
+        } else if (choice == 2) {
+            CraftProject selected = selectExistingProject(false);
+            if (selected != null) {
+                selected.markAsFinished();
+                System.out.println(selected.getName() + " marked as finished.");
+            }
+        } else if (choice == 3) {
+            CraftProject selected = selectExistingProject(false);
+            if (selected != null) {
+                selected.markDropped();
+                System.out.println(selected.getName() + " marked as dropped.");
+            }
+        } else if (choice == 4) {
+        } else {
+            System.out.println("Invalid option. Please try again.");
+        }
+    }
+}
 
         public void viewCraftProjects() {
             System.out.println("\n--- Craft Projects ---");
