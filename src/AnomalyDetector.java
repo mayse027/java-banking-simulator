@@ -12,27 +12,33 @@ public class AnomalyDetector {
     }
 
     public void checkTransaction(Transaction t) {
-        String category = t.getCategory();
-        List<Double> amounts = categoryHistory.get(category);
+    String category = t.getCategory();
+    List<Double> amounts = categoryHistory.get(category);
 
-        if (amounts == null) {
-            amounts = new ArrayList<>();
-            categoryHistory.put(category, amounts);
-        }
-
-        if (amounts.size() < 5) {
-            amounts.add(t.getAmount());
-            return;
-        }
-
-        double avg = averageAmount(category);
-        double stdDev = standardDeviation(category);
-        if (stdDev > 0 && Math.abs(t.getAmount() - avg) > 3 * stdDev) {
-            flag(t, "Anomalous transaction detected");
-        }
-
-        amounts.add(t.getAmount());
+    if (amounts == null) {
+        amounts = new ArrayList<>();
+        categoryHistory.put(category, amounts);
     }
+
+    if (amounts.size() < 5) {
+        amounts.add(t.getAmount());
+        return;
+    }
+
+    double avg = averageAmount(category);
+    double stdDev = standardDeviation(category);
+    if (stdDev > 0 && Math.abs(t.getAmount() - avg) > 3 * stdDev) {
+        double multiple = t.getAmount() / avg;
+        double numStdDevs = Math.abs(t.getAmount() - avg) / stdDev;
+        String reason = String.format(
+            "Amount $%.2f is %.1fx the %s category average ($%.2f), %.1f standard deviations away",
+            t.getAmount(), multiple, category, avg, numStdDevs
+        );
+        flag(t, reason);
+    }
+
+    amounts.add(t.getAmount());
+}
 
     private int countTransactions(String category) {
         List<Double> amounts = categoryHistory.get(category);
