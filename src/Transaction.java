@@ -4,11 +4,16 @@ public class Transaction {
     private double amount;
     private LocalDateTime timestamp;
     private String category;
+
     public Transaction(String type, double amount, String category) {
         this.type = type;
         this.amount = amount;
         this.timestamp = LocalDateTime.now();
         this.category = category;
+    }
+
+    public Transaction(String category, double amount) {
+        this("expense", amount, category);
     }
 
     public double getAmount() {

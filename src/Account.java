@@ -10,9 +10,10 @@ public abstract class Account {
     protected double monthlyBudget;
     protected double roundupSavings;
     protected List<Transaction> transactions;
-
+    protected AnomalyDetector detector;
             public Account(double initialBalance){
             balance = initialBalance;
+            detector = new AnomalyDetector(); 
             transactions = new ArrayList<>();
             transactions.add(new Transaction("Initial Deposit", initialBalance, "Income"));
         }
@@ -34,29 +35,56 @@ public abstract class Account {
             return balance;
         }
 
-        public void withdraw(double amount){
-            if (amount <= 0){
-                System.out.println("Invalid amount. Please try again.");
-                return;
-            }
-            if (amount > balance) {
-                System.out.println("Withdrawal amount exceeds current balance. Please try again.");
-                return;
-            }
-        
-                balance -= amount;
-                transactions.add(new Transaction("Withdrawal", amount, "Expense"));
-            System.out.println("Withdrawal successful. Would you like to enable round-up savings for this transaction? (yes/no)");
-            String response = Main.scanner.next();
-            if (response.equalsIgnoreCase("yes")) {
-                double roundUpAmount = Math.ceil(amount) - amount;
-                roundupSavings += roundUpAmount;
-                balance -= roundUpAmount;
-                transactions.add(new Transaction("Round-up Savings", roundUpAmount, "Savings"));
-                System.out.println("Round-up savings of $" + String.format("%.2f", roundUpAmount) + " has been added to your savings.");
-            }
+       public void withdraw(double amount){
+    if (amount <= 0){
+        System.out.println("Invalid amount. Please try again.");
+        return;
+    }
+    if (amount > balance) {
+        System.out.println("Withdrawal amount exceeds current balance. Please try again.");
+        return;
+    }
+
+    balance -= amount;
+    String category = promptForCategory();
+    Transaction t = new Transaction("Withdrawal", amount, category);
+    transactions.add(t);
+    detector.checkTransaction(t);
+
+    System.out.println("Withdrawal successful. Would you like to enable round-up savings for this transaction? (yes/no)");
+    String response = Main.scanner.next();
+    if (response.equalsIgnoreCase("yes")) {
+        double roundUpAmount = Math.ceil(amount) - amount;
+        roundupSavings += roundUpAmount;
+        balance -= roundUpAmount;
+        transactions.add(new Transaction("Round-up Savings", roundUpAmount, "Savings"));
+        System.out.println("Round-up savings of $" + String.format("%.2f", roundUpAmount) + " has been added to your savings.");
+    }
+}
+        private String promptForCategory() {
+    String[] categories = {"Groceries", "Entertainment", "Bills", "Transportation", "Dining", "Shopping", "Other"};
+
+    while (true) {
+        System.out.println("Select a category:");
+        for (int i = 0; i < categories.length; i++) {
+            System.out.println((i + 1) + ". " + categories[i]);
         }
-        
+        System.out.print("Enter number: ");
+
+        String input = Main.scanner.next();
+
+        try {
+            int choice = Integer.parseInt(input);
+            if (choice >= 1 && choice <= categories.length) {
+                return categories[choice - 1];
+            }
+        } catch (NumberFormatException e) {
+            // falls through to the reprompt below
+        }
+
+        System.out.println("Invalid choice. Please enter a number between 1 and " + categories.length + ".");
+        }
+    }   
 
         public double checkBalance(){
             return balance;
@@ -100,8 +128,6 @@ public abstract class Account {
         public void askCategory(String type, double amount) {
             System.out.print("Enter category for this " + type + ": ");
             String category = Main.scanner.next();
-            // Update the last transaction's category instead of creating a duplicate
-            // For now, just inform user the category has been recorded
             System.out.println("Category '" + category + "' recorded for this transaction.");
         }
         public void getSpendingByCategory(String category) {
@@ -120,7 +146,7 @@ public abstract class Account {
             }
             double totalSpending = 0;
             for (Transaction t : transactions) {
-                if (t.getCategory().equalsIgnoreCase("Expense")) {
+                if (t.getType().equalsIgnoreCase("Withdrawal")) {
                     totalSpending += t.getAmount();
                 }
             }
