@@ -10,9 +10,11 @@ public abstract class Account {
     protected double monthlyBudget;
     protected double roundupSavings;
     protected List<Transaction> transactions;
+    protected List<CraftProject> craftProjects;
     protected AnomalyDetector detector;
             public Account(double initialBalance){
             balance = initialBalance;
+            craftProjects = new ArrayList<>();
             detector = new AnomalyDetector(); 
             transactions = new ArrayList<>();
             transactions.add(new Transaction("Initial Deposit", initialBalance, "Income"));

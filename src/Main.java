@@ -16,7 +16,6 @@ public class Main {
 
         SavingsAccount savings = new SavingsAccount(initialBalance, interestRate);
         user.addAccount(savings);
-
         System.out.print("Enter initial balance for a Checking account: ");
         double initialCheckingsBalance = scanner.nextDouble();
         System.out.print("Enter monthly fee: ");
@@ -68,7 +67,7 @@ public class Main {
 
                 int choice = 0;
                 while (choice != 4) {
-                    System.out.println("1. Deposit\n2. Withdraw\n3. Check Balance\n4. Done with this account\n5. View Craft Projects");
+                    System.out.println("1. Deposit\n2. Withdraw\n3. Check Balance\n4. Done with this account\n5. View Craft Projects\n6. Manage Craft Projects");
                     choice = scanner.nextInt();
 
                     if (choice == 1) {
@@ -86,6 +85,8 @@ public class Main {
                     } else if (choice == 4) {
                     } else if (choice == 5) {
                         chosen.viewCraftProjects();
+                    } else if (choice == 6) {
+                        chosen.manageCraftProjects();
                     } else {
                         System.out.println("Invalid option. Please try again.");
                     }
